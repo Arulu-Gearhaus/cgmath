@@ -1,0 +1,28 @@
+{
+  "name": "cgmath",
+  "version": "0.1.0",
+  "description": "A math library intended for use in computer graphics",
+  "main": "./src/index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "chai": "4.1.2",
+    "mocha": "5.0.5"
+  },
+  "scripts": {
+    "test": "mocha src/index.test.js -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gochida/cgmath.git"
+  },
+  "keywords": [
+    "graphics",
+    "math"
+  ],
+  "author": "Arulu Mays",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Arulu-Gearhaus/cgmath/issues"
+  },
+  "homepage": "https://github.com/Arulu-Gearhaus/cgmath#readme"
+}
