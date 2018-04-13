@@ -92,7 +92,7 @@ class Vector extends Array {
     /** Much like a forEach, but iterates over two arrays. For each pair of values, 'func' is called with the 'left' and 'right' values for a given index. Arrays with mismatched lengths are allowed.
    * @param {Vector} left left vector
    * @param {Vector} right right vector
-   * @param {baseForEvery} func callback function
+   * @param {baseForEvery} func callback function. If func returns true it will end forEvery iteration early.
    * #### Different Lengths?
    * If one array is longer than the other, remaining pairs will have a zero in place of missing values from the shorter array.
    */
@@ -101,13 +101,14 @@ class Vector extends Array {
     for(let i = 0; i < longestLength; i++) {
       let l_val = left[i] || 0
       let r_val = right[i] || 0
-      func(l_val, r_val, i, left, right)
+      if(func(l_val, r_val, i, left, right))
+        return
     }
   }
 
   /** Much like a forEach, but iterates over two Vectors values at the same time. For each pair of values, 'func' is called with the 'left' (this vector) and 'right' (the other vector) values for a given index. Vectors with mismatched dimensions are allowed.
    * @param {Vector} right other/right vector
-   * @param {baseForEvery} func callback function
+   * @param {baseForEvery} func callback function. If func returns true it will end forEvery iteration early.
    * #### Different Lengths?
    * If one array is longer than the other, remaining pairs will have a zero in place of missing values from the shorter array.
    */
@@ -214,6 +215,27 @@ class Vector extends Array {
   toString() {
     let out = this.join(',')
     return `<${out}>`;
+  }
+
+  /** Compare two vectors, in order, value by value 
+   * @param {Vector} v1 vector which will be compared with the other vector
+   * @param {Vector} v2 second vector which will be compared with the first
+  */
+  static equals(v1, v2) {
+    let isEqual = true
+    this.forEvery(v1, v2, function(lval, rval) {
+      if(lval !== rval){
+        isEqual = false
+        return true //return true, indicating iterationg does need to stop
+      }
+    })
+    return isEqual
+  }
+
+  /** Compare to another vector, in order, value by value
+   * @param {Vector} other The other vector which will be compared to this*/
+  equals(other) {
+    return Vector.equals(this, other)
   }
 }
 
