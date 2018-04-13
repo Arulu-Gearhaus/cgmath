@@ -3,7 +3,7 @@
 /*
 MIT License
 
-Copyright (c) [year] [fullname]
+Copyright (c) 2018 Arulu Mays
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -44,8 +44,7 @@ The benefit of using a Vector2 over something like a bare array, is that it adds
 function baseForEvery(leftVal, rightVal, index, leftVector, rightVector){}
 // Disregard this - it's purely to provide a signature for the forEvery function's callback
 
-/** Generic Vector - designed to be flexible enough to use as a 2d, 3d, or higher dimension vector.  
- * Actual number of dimensions is dependent on how many values are stored inside it.  
+/** Generic Vector - designed to be flexible enough to use as a 2d, 3d, or higher dimension vector.   
  * Vector is: 
  * - An Array (sort-of) -  Vector is a descendant of Array.
  * - Forgiving - many of it's operation methods can work with mismatched Vector lengths - smaller dimension'd vectors have missing values treated as zero. 
@@ -69,8 +68,10 @@ class Vector extends Array {
     super(...args)
   }
 
-  // relabeling of length to be dimensions - for those who really need to have it say dimensions instead of length.
-  /** Returns the dimension this vector exists in */
+  /* _________
+   * ### Note
+   * `dimension` is an alias of Array.prototype.length. It exists because the 'length' of a vector is it's dimension - and when reading/reasoning about code involving vectors the term 'Dimension' may be more relevant to the reader.*/
+  /** The dimension of this vector*/
   get dimension() { return this.length }
 
   // Hard coded coordinate labels. Lets you use a vector by refering to myVec.x rather than myVec[0]. unfotunately anything over 4 dimensions must resort to using array notation. 
