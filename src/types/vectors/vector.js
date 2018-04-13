@@ -157,12 +157,14 @@ class Vector extends Array {
    */
   static multiply(vector, scalar) {
     if(vector instanceof Vector && !isNaN(scalar)){
+      // console.log('ok to multiply')
       let out = new Vector()
-      return vector.forEach((val) => {
+      vector.forEach((val) => {
         out.push(val * scalar)
       })
       return out
     }
+    // console.log('rejecting', vector, scalar)
     return undefined
   }
 
@@ -209,7 +211,12 @@ class Vector extends Array {
     return Vector.normalize(this)
   }
 
+  toString() {
+    let out = this.join(',')
+    return `<${out}>`;
+  }
 }
 
 module.exports = Vector
 
+// console.log(new Vector(1,2,3).toString())
