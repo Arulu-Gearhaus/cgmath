@@ -1,3 +1,29 @@
+'use strict'
+/*jslint node: true */
+/*
+MIT License
+
+Copyright (c) 2018 Arulu Mays
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
 const expect = require('chai').expect
 const Vector = require('./vector.js')
 
@@ -139,10 +165,10 @@ it('should be that Vector evinces the [Scalar] Distributive Property (a+b)P = aP
 /* Theorem 1.2 (Mathematics for 3d Game Programming & Computer Graphics 2nd Edition)
 The following properties should hold true:
 For vectors P, Q and scalar 'a'
-1) ||P||>= 0
-2) ||P||== 0 if and only if P = <0,0,...,0>
-3) ||aP|| == |a|*||P||
-4) ||P+Q|| <= ||P|| + ||Q||
+1) ‖P‖>= 0
+2) ‖P‖== 0 if and only if P = <0,0,...,0>
+3) ‖aP‖ == |a|*‖P‖
+4) ‖P+Q‖ <= ‖P‖ + ‖Q‖
 */
 
 it('should be that the Magnitude of a vector should be greater than or equal to zero', function() {
@@ -174,7 +200,7 @@ it('Only a `zero` vector (all values are zero) should have a magnitude of zero '
   }
 })
 
-it('should be that ||aP|| is the same value as |a|*||P|| (`a` is the scalar value) ', function() {
+it('should be that ‖aP‖ is the same value as |a|*‖P‖ (`a` is the scalar value) ', function() {
   let P0 = new Vector() // < 0, 0 ,0 ,0 >
   let P1 = new Vector() // < Max, Max, Max, Max >
   let P2 = new Vector() // < Min, Min, Min, Min >
@@ -185,18 +211,18 @@ it('should be that ||aP|| is the same value as |a|*||P|| (`a` is the scalar valu
     let a1 = (i + 1)
     let a2 = -1 * (i + 1)
     // multiple all P vectors by a positive scalar
-    expect(P0.multiply(a1).magnitude()).to.equal(P0.magnitude() * Math.abs(a1), `Vector ||aP|| Should equal |a|*||P||`)
-    expect(P1.multiply(a1).magnitude()).to.equal(P1.magnitude() * Math.abs(a1), `Vector ||aP|| Should equal |a|*||P||`)
-    expect(P2.multiply(a1).magnitude()).to.equal(P2.magnitude() * Math.abs(a1), `Vector ||aP|| Should equal |a|*||P||`)
+    expect(P0.multiply(a1).magnitude()).to.equal(P0.magnitude() * Math.abs(a1), `Vector ‖aP‖ Should equal |a|*‖P‖`)
+    expect(P1.multiply(a1).magnitude()).to.equal(P1.magnitude() * Math.abs(a1), `Vector ‖aP‖ Should equal |a|*‖P‖`)
+    expect(P2.multiply(a1).magnitude()).to.equal(P2.magnitude() * Math.abs(a1), `Vector ‖aP‖ Should equal |a|*‖P‖`)
 
     // now do it again with a negative scalar
-    expect(P0.multiply(a2).magnitude()).to.equal(P0.magnitude() * Math.abs(a2), `Vector ||aP|| Should equal |a|*||P||`)
-    expect(P1.multiply(a2).magnitude()).to.equal(P1.magnitude() * Math.abs(a2), `Vector ||aP|| Should equal |a|*||P||`)
-    expect(P2.multiply(a2).magnitude()).to.equal(P2.magnitude() * Math.abs(a2), `Vector ||aP|| Should equal |a|*||P||`)
+    expect(P0.multiply(a2).magnitude()).to.equal(P0.magnitude() * Math.abs(a2), `Vector ‖aP‖ Should equal |a|*‖P‖`)
+    expect(P1.multiply(a2).magnitude()).to.equal(P1.magnitude() * Math.abs(a2), `Vector ‖aP‖ Should equal |a|*‖P‖`)
+    expect(P2.multiply(a2).magnitude()).to.equal(P2.magnitude() * Math.abs(a2), `Vector ‖aP‖ Should equal |a|*‖P‖`)
   }
 })
 
-it('should be that ||P+Q|| is less than or equal to ||P|| + ||Q|| ', function() {
+it('should be that ‖P+Q‖ is less than or equal to ‖P‖ + ‖Q‖ ', function() {
   let P0 = new Vector() // < 0, 0 ,0 ,0 >
   let P1 = new Vector() // < Max, Max, Max, Max >
   let P2 = new Vector() // < Min, Min, Min, Min >Number.MIN_SAFE_INTEGER)
