@@ -1,5 +1,6 @@
 'use strict'
 /*jslint node: true */
+//need to document with some mathy symbols? Here you go! · α ‖
 /*
 MIT License
 
@@ -24,15 +25,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-/*
-You can use the Vector.js library with either arrays, or the defined Vector classes associated with Vector.js
-The various vector objects inherit from Array - they don't have ALL the functionality of Arrays due to quirks of how JS works
-But what should be necessary has been added in using VectorBase and forcing Array functionality using call() and Array.prototype.
-
-The benefit of using a Vector2 over something like a bare array, is that it adds some expected features like accessing coordinates by their cartesian labels (i.e. x, y, z).
-*/
-
-// VSCode doesn't support @callback ('''''because there is no """standard""" for jsdoc''''''')/s
+// VSCode doesn't support @callback ('because there is no """standard""" for jsdoc')/s
+// the below is so that we see a signature for forEvery's callback parameter rather than a generic 'arg1, arg2, arg3'
 /**
  * @param {number} leftVal value from left array, at (index)
  * @param {number} rightVal value from right array, at (index)
@@ -44,10 +38,12 @@ The benefit of using a Vector2 over something like a bare array, is that it adds
 function baseForEvery(leftVal, rightVal, index, leftVector, rightVector){}
 // Disregard this - it's purely to provide a signature for the forEvery function's callback
 
-/** Generic Vector - designed to be flexible enough to use as a 2d, 3d, or higher dimension vector.   
+/** ## Vector
+ * Dynamically sized vector class (dimension depends on it's contents). 
  * Vector is: 
- * - An Array (sort-of) -  Vector is a descendant of Array.
+ * - Actually an Array -  Vector is a descendant of Array.
  * - Forgiving - many of it's operation methods can work with mismatched Vector lengths - smaller dimension'd vectors have missing values treated as zero. 
+ * - Open to seeing others - You can use an array of numbers in place of any vector parameter.
  * - Chainable - many of the functions provided on Vector can be chained one after the other  
  * _________
  * ```
@@ -58,6 +54,9 @@ function baseForEvery(leftVal, rightVal, index, leftVector, rightVector){}
  * _________
  * - May not work exactly like an array - some functionality may not have carried over despite extending Array - I'm still in the process of discovering what's missing. If something was missed it can probably be added back in (see how forEach is added back to Vector in the source for an example of how)
  
+ ### Performance
+ Operations such as Add or Multiply allocate a new array whenever they are called.
+ All such functions take an (optional) Vector as their final parameter - passing this vector in will cause it's values to be over-written with the result of the operation.
  */
 class Vector extends Array {
 
@@ -117,39 +116,61 @@ class Vector extends Array {
     Vector.forEvery(this, right, func)
   }
 
-  static add(left, right) {
-    let out = new Vector()
-    Vector.forEvery(left, right, function(l_val, r_val) {
-      out.push(l_val + r_val)
+    /**Adds another vector to this vector  
+   * @param {Vector} v1 first vector 
+   * @param {Vector} v2 the second vector being added to the first
+   * @param {Vector} out (optional) vector to store the result. By default, a new vector will be created and returned.
+   * @returns {Vector} the result from addition. If 'out' was passed in a reference to that vector is returned insteadaddition*/
+  static add(v1, v2, out=undefined) {
+    if(!(out instanceof Vector)){
+      out = new Vector()
+    }
+
+    Vector.forEvery(v1, v2, function(l_val, r_val, index) {
+      if(out.length <= index) {
+        out.push(l_val + r_val)
+      } else {
+        out[index] = l_val + r_val
+      }
     })
     return out
   }
 
   /**Adds another vector to this vector  
    * @param {Vector} otherVec the other vector (to add to this vector.)
-   * @returns {Vector} a **(new)** vector, who's values are the result of subtraction
-   * */ 
-  add(otherVec) { 
-    return Vector.add(this, otherVec)
+   * @param {Vector} out (optional) vector to store the result. By default, a new vector will be created and returned.
+   * @returns {Vector} the result from addition. If 'out' was passed in a reference to that vector is returned insteadaddition*/
+  add(otherVec, out=undefined) { 
+    return Vector.add(this, otherVec, out)
   }
+
   /** Subtract the right vector from the left vector
    * @param {Vector} left an array representing a vector
    * @param {Vector} right an array representing a vector
-   * @returns {Vector} a **(new)** vector, who's values are the result of the addition
+   * @param {Vector} out (optional) vector to store the result. By default, a new vector will be created and returned.
+   * @returns {Vector} the result from subtraction. If 'out' was passed in a reference to that vector is returned insteadaddition
    * */ 
-  static subtract(left, right) { 
-    let out = new Vector()
-    this.forEvery(left, right, function(l_val, r_val){
-      out.push(l_val - r_val)
+  static subtract(left, right, out=undefined) { 
+    if(!(out instanceof Vector)){
+      out = new Vector()
+    }
+    this.forEvery(left, right, function(l_val, r_val, index){
+      if(out.length <= index) {
+        out.push(l_val - r_val)
+      } else {
+        out[index] = l_val - r_val
+      }
     })
     return out
   }
 
   /** subtracts another vector from this vector.
-   * @returns {Vector} a **(new)** vector, who's values are the result of the subtraction
+   * @param {Vector} other the vector subtracting from this vector.
+   * @param {Vector} out (optional) vector to store the result. By default, a new vector will be created and returned.
+   * @returns {Vector} the  resulting vector from subtraction. If 'out' was passed in a reference to that vector is returned instead.
    * */
-  subtract(otherVec) {
-    return Vector.subtract(this, otherVec)
+  subtract(otherVec, out) {
+    return Vector.subtract(this, otherVec, out)
   }
 
   /** Multiply a scalar with a vector
@@ -176,7 +197,7 @@ class Vector extends Array {
   
   /** Calculates the magnitude (or length) of a vector 
    * @param {Vector} A a vector
-   * @returns {number} magnitude (length) of vector A -> ||A||
+   * @returns {number} magnitude (length) of vector A -> ‖A‖
   */
   static magnitude(A) {
     let sumOfPowers = 0 // represents Ax^2 + Ay^2 + .. + An^2
@@ -186,8 +207,8 @@ class Vector extends Array {
     return Math.pow(sumOfPowers, 0.5)
   }
 
-  /** Calculates the magnitude (or length) of this vector 
-   * @returns {number} magnitude (length) of this vector, ||this||
+  /** Calculates ‖A‖, the magnitude (or length) of this vector 
+   * @returns {number} magnitude (length) of this vector
   */
   magnitude() {
     return Vector.magnitude(this)
@@ -212,6 +233,31 @@ class Vector extends Array {
   normalize() {
     return Vector.normalize(this)
   }
+
+  /**Calculates the dot product of two vectors, v1 and v2.  
+   * (aka 'sum of products')  
+   * ### Hot Dot Product Facts
+   * - If P·Q = 0, then vectors P and Q are perpendicular. Note that cosine(90) is zero.
+   * - P·Q = ‖P‖‖Q‖cosα - where "α is the 'planar angle' between the lines connecting the origin to the points represented by P and Q" - (Lengyel, Eric)
+   * @param {*} otherVec 
+   */
+  static dot(v1, v2) {
+    let out = 0
+    Vector.forEvery(v1, v2, (lval, rval) => {
+      out += v1 * v2
+    })
+    return out
+  }
+
+  /**Calculates the dot product of this vector and otherVector.  
+   * (aka 'sum of products')
+   * @param {*} otherVec 
+   */
+  dot(otherVector) {
+    return Vector.forEvery(this, otherVector)
+  }
+
+
 
   toString() {
     let out = this.join(',')
@@ -243,3 +289,4 @@ class Vector extends Array {
 module.exports = Vector
 
 // console.log(new Vector(1,2,3).toString())
+//console.log(Vector.add([1,1,1],[2,2,2]))
