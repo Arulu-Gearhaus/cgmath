@@ -244,7 +244,7 @@ class Vector extends Array {
   static dot(v1, v2) {
     let out = 0
     Vector.forEvery(v1, v2, (lval, rval) => {
-      out += v1 * v2
+      out += lval * rval
     })
     return out
   }
@@ -254,10 +254,8 @@ class Vector extends Array {
    * @param {*} otherVec 
    */
   dot(otherVector) {
-    return Vector.forEvery(this, otherVector)
+    return Vector.dot(this, otherVector)
   }
-
-
 
   toString() {
     let out = this.join(',')
