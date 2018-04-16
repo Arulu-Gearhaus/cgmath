@@ -243,3 +243,63 @@ it('should be that ‖P+Q‖ is less than or equal to ‖P‖ + ‖Q‖ ', funct
     expect(P2.add(Q2).magnitude() <= (P2.magnitude() + Q2.magnitude())).to.equal(true)
   }
 })
+
+/* Properties regarding dot product
+  P·Q = Q·P
+  (aP)·Q = a(P·Q)
+  P·(Q·R) = P·Q + P·R
+  P·P = ‖P‖^2
+*/
+
+it('should be such that P·Q = Q·P', function() {
+  let P0 = new Vector() // < 0, 0 ,0 ,0 >
+  let P1 = new Vector() // < Max, Max, Max, Max >
+  let P2 = new Vector() // < Min, Min, Min, Min >Number.MIN_SAFE_INTEGER)
+  let Q1 = new Vector() // <1, 2, 3, 4>
+  let Q2 = new Vector() // <-1, -2, -3, -4>
+  for(let i = 0; i < 4; i++) {
+    P0.push(0)
+    P1.push(Number.MAX_SAFE_INTEGER/2)
+    P2.push(Number.MIN_SAFE_INTEGER/2)
+    Q1.push(i+1)
+    Q2.push(-1*(i+1))
+    console.log(P0, Q1, P0.dot(Q1), Q1.dot(P0))
+    expect(P0.dot(Q1)).to.equal(Q1.dot(P0))
+    expect(P1.dot(Q1)).to.equal(Q1.dot(P1))
+    expect(P2.dot(Q1)).to.equal(Q1.dot(P2))
+    expect(P0.dot(Q2)).to.equal(Q2.dot(P0))
+    expect(P1.dot(Q2)).to.equal(Q2.dot(P1))
+    expect(P2.dot(Q2)).to.equal(Q2.dot(P2))
+    
+    expect(P0.dot(P1)).to.equal(P1.dot(P0))
+    expect(P0.dot(P2)).to.equal(P2.dot(P0))
+    expect(P1.dot(P2)).to.equal(P2.dot(P1))
+  }
+})
+
+it('should be such that (aP)·Q = a(P·Q)', function() {
+  let P0 = new Vector() // < 0, 0 ,0 ,0 >
+  let P1 = new Vector() // < Max, Max, Max, Max >
+  let P2 = new Vector() // < Min, Min, Min, Min >Number.MIN_SAFE_INTEGER)
+  let Q1 = new Vector() // <1, 2, 3, 4>
+  let Q2 = new Vector() // <-1, -2, -3, -4>
+  for(let i = 0; i < 4; i++) {
+    P0.push(0)
+    P1.push(Number.MAX_SAFE_INTEGER/2)
+    P2.push(Number.MIN_SAFE_INTEGER/2)
+    Q1.push(i+1)
+    Q2.push(-1*(i+1))
+    let a = i
+    
+    expect(P0.multiply(a).dot(Q1)).to.equal(Q1.dot(P0) * (a))
+    expect(P1.multiply(a).dot(Q1)).to.equal(Q1.dot(P1) * (a))
+    expect(P2.multiply(a).dot(Q1)).to.equal(Q1.dot(P2) * (a))
+    expect(P0.multiply(a).dot(Q2)).to.equal(Q2.dot(P0) * (a))
+    expect(P1.multiply(a).dot(Q2)).to.equal(Q2.dot(P1) * (a))
+    expect(P2.multiply(a).dot(Q2)).to.equal(Q2.dot(P2) * (a))
+    
+    expect(P0.multiply(a).dot(P1)).to.equal(P1.dot(P0) * (a))
+    expect(P0.multiply(a).dot(P2)).to.equal(P2.dot(P0) * (a))
+    expect(P1.multiply(a).dot(P2)).to.equal(P2.dot(P1) * (a))
+  }
+})
