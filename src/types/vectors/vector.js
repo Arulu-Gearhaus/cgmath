@@ -38,6 +38,17 @@ SOFTWARE.
 function baseForEvery(leftVal, rightVal, index, leftVector, rightVector){}
 // Disregard this - it's purely to provide a signature for the forEvery function's callback
 
+/** Attempts to coerce a value to be a Number. If the value is NaN it returns zero. (NaN is zero)*/
+function makeNumber(val) {
+  switch(typeof val) {
+    case "number": return val;
+    case "string": 
+      let out = parseFloat(val)
+      return isNaN(out) ? 0 : out // parseFloat's result may be NaN, return zero if so.
+    default: return 0
+  }
+}
+
 /** ## Vector
  * Dynamically sized vector class (dimension depends on it's contents). 
  * Vector is: 
@@ -64,7 +75,9 @@ class Vector extends Array {
    * @param {number[]} args
   */
   constructor(...args) {
-    super(...args)
+    let vals = []
+    args.forEach(val => vals.push(makeNumber(val)))
+    super(...vals)
   }
 
   /* _________
@@ -78,10 +91,10 @@ class Vector extends Array {
   get y() { return this[1] }
   get z() { return this[2] }
   get w() { return this[3] }
-  set x(val) { this[0] = val }
-  set y(val) { this[1] = val }
-  set z(val) { this[2] = val }
-  set w(val) { this[3] = val }
+  set x(val) { this[0] = makeNumber(val) }
+  set y(val) { this[1] = makeNumber(val) }
+  set z(val) { this[2] = makeNumber(val) }
+  set w(val) { this[3] = makeNumber(val) }
 
   /**
    * @param {function(number, number, Array):null} callbackfn 
