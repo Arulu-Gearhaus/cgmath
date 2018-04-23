@@ -27,6 +27,12 @@ SOFTWARE.
 const expect = require('chai').expect
 const Vector = require('./vector.js')
 
+/** The largest safe value you can store in a vector and have operations such as
+ * dot product work. Bear in mind that you will quickly exceed Number.MAX_SAFE_INTEGER - at which point valid output can't be guaranteed.
+ * This is a good bounding number for the purpose of this unit test.
+ */
+const MAX_SAFE_VALUE = Math.floor(Math.sqrt(Number.MAX_SAFE_INTEGER))
+
 function expectEqual(suspect, expected, message) {
   expect(suspect).to.equal(expected, `${message}: Expected ${expected}, but got ${suspect}`)
 }
@@ -93,7 +99,7 @@ it('should be that Vector evinces the Commutative Property P+Q = Q+P', function(
   let Q1 = new Vector() // < Min, Min, Min, Min >
   for(let i = 0; i < 4; i++) {
     P1.push(0)
-    Q1.push(Number.MAX_SAFE_INTEGER/2)
+    Q1.push(MAX_SAFE_VALUE)
 
     expect(P1.add(Q1).equals(Q1.add(P1))).to.equal(true)
   }
@@ -108,8 +114,8 @@ it('should be that Vector evinces the Associative Property (P + Q) + R = P + (Q 
   let R1 = new Vector() // < Min, Min, Min, Min >
   for(let i = 0; i < 4; i++) {
     P1.push(Number.MIN_SAFE_INTEGER/2)
-    Q1.push(Number.MAX_SAFE_INTEGER/2)
-    R1.push(Number.MAX_SAFE_INTEGER/2)
+    Q1.push(MAX_SAFE_VALUE)
+    R1.push(MAX_SAFE_VALUE)
     let PQR = R1.add(P1.add(Q1))
     let RQP = P1.add(Q1.add(R1))
     // console.log('PQR', PQR, 'RQP', RQP)
@@ -122,7 +128,7 @@ it('should be that Vector evinces the [Scalar] Associative Property (ab)P = a(bP
   let P2 = new Vector() // < Min, Min, Min, Min >
   for(let i = 1; i <= 4; i++) {
     P1.push(Number.MIN_SAFE_INTEGER/2)
-    P2.push(Number.MAX_SAFE_INTEGER/2)
+    P2.push(MAX_SAFE_VALUE)
     let a = i
     let b = -i
     expect(P1.multiply(a*b).equals(P1.multiply(b).multiply(a))).to.equal(true)
@@ -135,7 +141,7 @@ it('should be that Vector evinces the Distributive Property a(P+Q) = aP + aQ', f
   let Q1 = new Vector() // < Min, Min, Min, Min >
   for(let i = 1; i <= 4; i++) {
     P1.push(Number.MIN_SAFE_INTEGER/2)
-    Q1.push(Number.MAX_SAFE_INTEGER/2)
+    Q1.push(MAX_SAFE_VALUE)
     let a = i
     let aPQ = P1.add(Q1).multiply(a) // (PQ)a
     let aP = P1.multiply(a)
@@ -149,7 +155,7 @@ it('should be that Vector evinces the [Scalar] Distributive Property (a+b)P = aP
   let P2 = new Vector() // < Min, Min, Min, Min >
   for(let i = 1; i <= 4; i++) {
     P1.push(Number.MIN_SAFE_INTEGER/2)
-    P2.push(Number.MAX_SAFE_INTEGER/2)
+    P2.push(MAX_SAFE_VALUE)
     let a = i
     let b = -i
     let aP1 = P1.multiply(a)
@@ -177,7 +183,7 @@ it('should be that the Magnitude of a vector should be greater than or equal to 
   let P2 = new Vector() // < Min, Min, Min, Min >
   for(let i = 0; i < 4; i++) {
     P0.push(0)
-    P1.push(Number.MAX_SAFE_INTEGER/2)
+    P1.push(MAX_SAFE_VALUE)
     P2.push(Number.MIN_SAFE_INTEGER/2)
   
     expect(P0.magnitude() >= 0).to.equal(true)
@@ -192,7 +198,7 @@ it('Only a `zero` vector (all values are zero) should have a magnitude of zero '
   let P2 = new Vector() // < Min, Min, Min, Min >
   for(let i = 0; i < 4; i++) {
     P0.push(0)
-    P1.push(Number.MAX_SAFE_INTEGER/2)
+    P1.push(MAX_SAFE_VALUE)
     P2.push(Number.MIN_SAFE_INTEGER/2)
     expect(P0.magnitude()).to.equal(0, "Zero vector should have a magnitude of zero")
     expect(P1.magnitude()).to.not.equal(0, "Non zero vectors should have a magnitude greater than zero")
@@ -206,7 +212,7 @@ it('should be that ‖aP‖ is the same value as |a|*‖P‖ (`a` is the scalar 
   let P2 = new Vector() // < Min, Min, Min, Min >
   for(let i = 0; i < 4; i++) {
     P0.push(0)
-    P1.push(Number.MAX_SAFE_INTEGER/2)
+    P1.push(MAX_SAFE_VALUE)
     P2.push(Number.MIN_SAFE_INTEGER/2)
     let a1 = (i + 1)
     let a2 = -1 * (i + 1)
@@ -230,7 +236,7 @@ it('should be that ‖P+Q‖ is less than or equal to ‖P‖ + ‖Q‖ ', funct
   let Q2 = new Vector() // <-1, -2, -3, -4>
   for(let i = 0; i < 4; i++) {
     P0.push(0)
-    P1.push(Number.MAX_SAFE_INTEGER/2)
+    P1.push(MAX_SAFE_VALUE)
     P2.push(Number.MIN_SAFE_INTEGER/2)
     Q1.push(i+1)
     Q2.push(-1*(i+1))
@@ -259,7 +265,7 @@ it('should be such that P·Q = Q·P', function() {
   let Q2 = new Vector() // <-1, -2, -3, -4>
   for(let i = 0; i < 4; i++) {
     P0.push(0)
-    P1.push(Number.MAX_SAFE_INTEGER/2)
+    P1.push(MAX_SAFE_VALUE)
     P2.push(Number.MIN_SAFE_INTEGER/2)
     Q1.push(i+1)
     Q2.push(-1*(i+1))
@@ -285,7 +291,7 @@ it('should be such that (aP)·Q = a(P·Q)', function() {
   let Q2 = new Vector() // <-1, -2, -3, -4>
   for(let i = 0; i < 4; i++) {
     P0.push(0)
-    P1.push(Number.MAX_SAFE_INTEGER/2)
+    P1.push(MAX_SAFE_VALUE)
     P2.push(Number.MIN_SAFE_INTEGER/2)
     Q1.push(i+1)
     Q2.push(-1*(i+1))
