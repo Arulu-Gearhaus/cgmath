@@ -1,7 +1,7 @@
 'use strict';
 /*jslint node: true */
 
-const vector = require('./src/types/vectors/vector.js')
+const vector = require('./types/vectors/vector.js')
 
 let i = new vector(4,5,6)
 console.log(i.toString())
@@ -18,3 +18,4 @@ let j = new out.vector(2,2,2);
 console.log(j.magnitude())
 console.log(j.normalize())
 console.log(j.normalize().add(i).subtract(j))
+console.log(vector.MAX_SAFE_VALUE)
