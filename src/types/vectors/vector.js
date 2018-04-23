@@ -71,7 +71,7 @@ function makeNumber(val) {
  */
 class Vector extends Array {
 
-  /** Creates a new Vector - handles parameters the same way as an Array constructor would - but only values of type number will work for Vector. 
+  /** Creates a new Vector - handles parameters the same way as an Array constructor would - but will attempt to convert non-number values to float. (Treats values it can't convert as zeroes)
    * @param {number[]} args
   */
   constructor(...args) {
@@ -133,7 +133,7 @@ class Vector extends Array {
    * @param {Vector} v1 first vector 
    * @param {Vector} v2 the second vector being added to the first
    * @param {Vector} out (optional) vector to store the result. By default, a new vector will be created and returned.
-   * @returns {Vector} the result from addition. If 'out' was passed in a reference to that vector is returned insteadaddition*/
+   * @returns {Vector} the result from addition. If 'out' was passed in a reference to that vector is returned instead*/
   static add(v1, v2, out=undefined) {
     if(!(out instanceof Vector)){
       out = new Vector()
@@ -152,7 +152,7 @@ class Vector extends Array {
   /**Adds another vector to this vector  
    * @param {Vector} otherVec the other vector (to add to this vector.)
    * @param {Vector} out (optional) vector to store the result. By default, a new vector will be created and returned.
-   * @returns {Vector} the result from addition. If 'out' was passed in a reference to that vector is returned insteadaddition*/
+   * @returns {Vector} the result from addition. If 'out' was passed in a reference to that vector is returned instead*/
   add(otherVec, out=undefined) { 
     return Vector.add(this, otherVec, out)
   }
