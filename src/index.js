@@ -1,21 +1,17 @@
 'use strict';
 /*jslint node: true */
 
-const vector = require('./types/vectors/vector.js')
-
-let i = new vector(4,5,6)
-console.log(i.toString())
-let k = function() { }
-k.prototype = vector
-let kn = new k(1,2,3)
-console.log('kn', kn)
+const Vector = require('./types/vectors/vector.js')
 
 const out = {
-  /** Vector value type - designed to be flexible for use at any dimension.*/
-  vector: vector
+  /** Vector value type - designed to be flexible for use at any dimension.  
+   * The dimension of a Vector is determined by it's length (Vector extends Array).  
+   *   
+   * -----
+   * **Note**  
+   * You CAN technically pass arguments that aren't type Number, but Vector will attempt to convert them to numbers (i.e. will try to parse float from strings). **Treats NaN values as zero.**
+  */
+  Vector: Vector
 }
-let j = new out.vector(2,2,2);
-console.log(j.magnitude())
-console.log(j.normalize())
-console.log(j.normalize().add(i).subtract(j))
-console.log(vector.MAX_SAFE_VALUE)
+
+module.exports = out
